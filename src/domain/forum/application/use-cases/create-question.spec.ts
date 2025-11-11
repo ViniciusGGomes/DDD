@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { CreateQuestionUseCase } from "./create-question";
-import { InMemoryQuestionsRepositories } from "@/test/repositories/in-memory-questions-repositories";
+import { InMemoryQuestionsRepository } from "@/test/repositories/in-memory-questions-repository";
 
-let inMemoryQuestionsRepositories: InMemoryQuestionsRepositories;
+let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let sut: CreateQuestionUseCase;
 
 describe("Create a Question", () => {
   beforeEach(() => {
-    inMemoryQuestionsRepositories = new InMemoryQuestionsRepositories();
-    sut = new CreateQuestionUseCase(inMemoryQuestionsRepositories);
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
+    sut = new CreateQuestionUseCase(inMemoryQuestionsRepository);
   });
 
   it("Should be able to create a question", async () => {
@@ -20,7 +20,7 @@ describe("Create a Question", () => {
 
     expect(question.content).toEqual("Conteúdo da pergunta");
     expect(question.id).toBeTruthy();
-    expect(inMemoryQuestionsRepositories.items[0].authorId).toEqual(
+    expect(inMemoryQuestionsRepository.items[0].authorId).toEqual(
       question.authorId
     );
   });
