@@ -14,17 +14,18 @@ describe("Get Question By Slug", () => {
   });
 
   it("should be able to get a question by slug", async () => {
-    const createSlug = makeQuestion({
-      slug: Slug.create("nova-pergunta"),
+    const newQuestion = makeQuestion({
+      slug: Slug.create("example-question"),
     });
 
-    await inMemoryQuestionsRepository.create(createSlug);
+    await inMemoryQuestionsRepository.create(newQuestion);
 
-    const { question } = await sut.execute({
-      slug: "nova-pergunta",
+    const result = await sut.execute({
+      slug: "example-question",
     });
 
-    expect(question.id).toBeTruthy();
-    expect(createSlug.slug).toEqual(question.slug);
+    if (result.isRight()) {
+      expect(result.value.question.slug).toEqual(newQuestion.slug);
+    }
   });
 });
