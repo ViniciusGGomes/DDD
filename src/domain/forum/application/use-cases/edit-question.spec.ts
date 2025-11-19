@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { EditQuestionUseCase } from "./edit-question";
 import { makeQuestion } from "@/test/factory/make-question";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { NotAllowedError } from "./erros/not-allowed-error";
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let sut: EditQuestionUseCase;
@@ -46,13 +47,14 @@ describe("Edit Question", () => {
 
     await inMemoryQuestionsRepository.create(newQuestion);
 
-    await expect(() => {
-      return sut.execute({
-        content: "Texto Editado",
-        title: "Titulo editado",
-        authorId: "author-2",
-        questionId: newQuestion.id.toValue(),
-      });
-    }).rejects.toBeInstanceOf(Error);
+    const result = await sut.execute({
+      content: "Texto Editado",
+      title: "Titulo editado",
+      authorId: "author-2",
+      questionId: newQuestion.id.toValue(),
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 });
